@@ -8,13 +8,22 @@ import { WinnerModal } from "./components/WinnerModal";
 
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
-
-  const [turn, setTurn] = useState(TURNS.X)
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem('board');
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return  Array(9).fill(null)
+  });
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = window.localStorage.getItem('turn');
+    if(turnFromStorage) return JSON.parse(turnFromStorage)
+    return  TURNS.X
+  })
   const [winner, setWinner] = useState(null);
 
-  const updateBoard = (index) => {
+  
 
+
+  const updateBoard = (index) => {
     //check if there is something on the square or there is a winner not allow to click
     if( board[index] || winner ) return
 
@@ -27,8 +36,11 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
+    window.localStorage.setItem('board', JSON.stringify(newBoard))
+    window.localStorage.setItem('turn', JSON.stringify(newTurn))
+
     const newWinner = checkWinnerFrom(newBoard)
-    
+
     if(newWinner){
       confetti();
       setWinner(newWinner)
@@ -42,6 +54,8 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null);
+    window.localStorage.removeItem('board')
+    window.localStorage.removeItem('item')
   }
 
   return (
