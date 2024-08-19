@@ -1,8 +1,11 @@
+//Constants of the game turns 
 export const TURNS = { // turnos
   X: '❌',
   O: '⚪'
 }
 
+
+//all the posible options for a winning player
 export const WINNER_COMBOS = [
     [0,1,2],
     [3,4,5],
